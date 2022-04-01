@@ -1,0 +1,173 @@
+\documentclass[uplatex,dvipdfmx,ja=standard]{bxjsarticle}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{ascmac}
+\usepackage{titlesec}
+\usepackage{amsthm}
+%
+\setlength{\textwidth}{\fullwidth}
+\setlength{\textheight}{40\baselineskip}
+\addtolength{\textheight}{\topskip}
+\setlength{\voffset}{-0.2in}
+\setlength{\topmargin}{0pt}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+%
+\newcommand{\divergence}{\mathrm{div}\,}  %ダイバージェンス
+\newcommand{\grad}{\mathrm{grad}\,}  %グラディエント
+\newcommand{\rot}{\mathrm{rot}\,}  %ローテーション
+%
+\renewcommand\proofname{\bf 証明}
+%
+%
+\theoremstyle{definition}
+\newtheorem{theorem}{定理}
+\newtheorem*{theorem*}{定理}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem*{definition*}{定義}
+%
+\numberwithin{theorem}{section}  % 定理番号を「定理2.3」のように印刷
+\numberwithin{equation}{section} % 式番号を「(3.5)」のように印刷
+%
+%
+\title{折り紙のモデル化，検証}
+\author{Stockyawaway}
+\begin{document}
+\maketitle
+%
+%
+\section{折り紙の形式化}
+
+\subsection{操作の抽象化}
+
+\begin{definition}
+    (抽象折り紙) 抽象折り紙は，以下を満たす3つ組$( \Pi , \sim , \succ )$である．
+\end{definition}
+
+    ・$\Pi$ は有限集合，$\Pi$ の要素を面と呼ぶ．
+
+    ・$\sim$と$\succ$は，それぞれ隣接関係，重なり関係と呼ばれる$\Pi$上の二項関係．
+
+
+\begin{definition}
+    (抽象折り紙系)抽象折り紙系は，以下を満たす抽象書換系 $ (\mathcal{O} ,\looparrowright) $である．
+\end{definition}
+    
+    ・$\mathcal(O)$は，抽象折り紙の集合
+
+    ・$\looparrowright$は，$\mathcal{O}$上の二項関係で抽象折りと呼ぶ．
+
+抽象折り紙$O,O' \in \mathcal{O}$が抽象折り$\looparrowright$により関連づけられているとき，$O \looparrowleft O'$と表す．以下，抽象折りを行う具体的な手続きを折り操作と呼ぶ．
+
+折り紙における図形の構成は，他ステップの折り操作である．ステップ$i$における抽象折り紙$O_i = (\Pi_i , \sim_i , \succ_i)$は，ステップ$i-1$における抽象折り$O_{i-1} = (\Pi_{i-1} , \sim_{i-1} , \succ_{i-1})$ に．抽象折り$\looparrowright$を適用することにより得られる．また，図形の構成には，その完成に至るまで，抽象折り紙の有限列が構成される．
+
+\begin{displaymath}
+    O_0 \looparrowright O_1 \looparrowright ... \looparrowright O_n, \: O_0,O_1,...,O_n \in \mathcal{O}
+\end{displaymath}
+
+
+以下，抽象折り紙に対する具体的な構成を与える．
+
+\begin{definition}
+    (面)面は，平面上の向きを持った凸$n(n \geq 3)$角形である．
+\end{definition}
+
+凸n角形は，その頂点$P_1 , ... ,P_n$の点列$\langle P_1 , ... P_n \rangle$で表す．2つの凸n角形$f,g$は，各々の内部に点$P,Q$が存在し，$P,Q$が重なるとき，重畳関係にあると呼ぶ．$f,g$が重畳関係にあることを，$f \asymp g$で表す．
+
+\begin{definition}
+    (面の隣接関係)2つの面$f$と$g$が1つの辺を共有する時，$f$と$g$は隣接するといい，$f \sim g$ と表す．即ち，$f \sim g \iff \exists P_k , P_{k+1}$
+\end{definition}
+
+面の重なり関係について，上下関係を決定する手続きを仮定したうえで，以下のように定義する．
+
+\begin{definition}
+    (面の重なり関係)2つの面$f,g$が与えられたとき，$f$が$g$の上にあり，かつ$g$の上にあるどの面もfの下にないとき，$f$は$g$に重なるといい，$f \succ g$と表す．
+\end{definition}
+
+ただし，折り操作の結果得られる面の上下関係は，1つ前のステップの面の上下関係とおり方の種類によって帰納的に決定される．従って，面の重なり関係も同様に帰納的に定義される．後章参照．
+
+\subsection{折り操作の形式化}
+
+パラメータとして，面と折り方が挙げられる．
+
+
+\subsubsection*{\rm{(1)折る面の集合$\mathcal{F}$を指定し，どのような折り方をするかを決定する折り方は，Huzita の折り紙公理を参照．}}
+
+\subsubsection*{\rm{(2)折り線$l$を計算し，指定された折り方によって折るときに回転する面が，$l$の右側になるように$l$に向きをつける．以下，向きのついた折り線を有効折り線と呼び，$r$で表す．$r$の右側の面が必ずしもすべて折り曲げられているとは限らないが，折り曲げられる面は常に$r$の右側にある．}}
+
+\subsubsection*{\rm{(3)面$f \in \mathcal{F}$に対して，$\mathcal{F} = \emptyset$となるまで，以下の操作を繰り返す．}}
+
+(a)面$f$を$r$で$f_1$，$f_2$に分割し，$f_1$と$f_2$の隣接関係および$r$に対する位置関係を生成する．ここでは，$f_2$が$r$の右側にある回転する面であるとする．$f$が分割されない場合，新しい隣接関係は生成されない．
+
+(b)集合$\mathcal{F}$から$f$を除き，隣接関係と重なり関係を用いて，この分割によって影響を受ける面を新たに$\mathcal{F}$に追加する．面の分割の詳細と影響を受ける面の選択に関しては後述．
+
+\subsubsection*{\rm{(4)分割によって新しい面が生成されているので，面の隣接関係を更新する．}}
+
+\subsubsection*{\rm{(5)分割によって生じた面の重なり関係を生成する．}}
+
+\subsubsection*{\rm{(6)折り線$r$の右側にある回転する面を$r$に沿って回転させる．}}
+
+\subsubsection*{\rm{(7)回転によって生じた面の重なり関係を生成する．}}
+
+\section{グラフを用いたモデル化}
+
+\begin{definition}
+    (ハイパーグラフ)ハイパーグラフは，以下を満たす4つ組$(V,E,s,t)$である．
+\end{definition}
+
+    ・$V$は，nodeの集合．
+    ・$E$は，ハイパーエッジの集合．
+    ・$s,t:E \to V^*$ はそれぞれ，ソースおよびターゲット集合．
+
+\begin{definition}
+    (ラベル付きハイパーグラフ)ラベルアルファベットの組$\mathcal{L} = (\mathcal{L}_V , \mathcal{L}_E)$ が関数$\tau_s,\tau_t: \mathcal{L}_E \to \mathcal{L}^*_V$ と共に与えられたとき，$\mathcal{L}-$ラベル付きハイパーグラフは，以下を満たす6つ組$(V,E,s,t,l_V,l_E)$である．
+\end{definition}
+
+    ・$(V,E,s,t)$はハイパーグラフ
+    ・$l_V : V \to \mathcal{L}_V$と$l_E : E \to \mathcal{L}_E$は，ラベル関数で，条件$\tau_s \circ l_E = l^*_V s, \tau_t \circ l_E = l^*_V \circ t$を満たす．
+
+関数$\tau_s, \tau_t$およびラベル関数が満たす条件は，ノードとエッジのラベル付けに整合性を与えるものである．
+
+
+
+
+
+
+\begin{theorem}[hoge]
+    hoge
+\end{theorem}
+
+\begin{proof}
+    hoge
+    \begin{equation}
+        a = b
+    \end{equation}
+\end{proof}
+%\begin{table}[ht]i
+%    \caption{}
+%    \label{table:}
+%    \centering
+%    \begin{tabular}{c | c | c}．
+%     \hline \hline
+%     \hline
+%    \end{tabular}
+%\end{table}
+
+
+%\begin{figure}[htb]
+%    \centering
+%    \includegraphics[scale=0.23]{1.png}
+%    \caption{}
+%    \label{figure:}
+%\end{figure}
+
+
+
+
+
+%
+%
+\end{document}
+
+%%% End:
